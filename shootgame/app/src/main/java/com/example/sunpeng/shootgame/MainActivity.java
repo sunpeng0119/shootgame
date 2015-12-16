@@ -2,52 +2,67 @@ package com.example.sunpeng.shootgame;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Looper;
-import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends Activity {
-
-    private UIHandler mUIHandler;
-    //private WorkHandler mWorkHander;workhandler定义
+    EnemyPlane enemyPlane;
+    List<EnemyPlane> enemyPlaneList;
+    int time;
+    int num;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
-        RelativeLayout root=(RelativeLayout)findViewById(R.id.root);
-        final EnemyPlane enemyPlane=new EnemyPlane(this);
-        final EnemyPlane  enmy[];
-        enemyPlane.currentX=50;
-        enemyPlane.currentY=50;
-        mUIHandler=new UIHandler(Looper.getMainLooper());
-        //HandlerThread thread=new HandlerThread("my work");
-        //thread.start();
-        //mWorkHander=new WorkHandler(thread.getLooper());
+        final RelativeLayout root=(RelativeLayout)findViewById(R.id.root);
+        enemyPlane=new EnemyPlane(this);
+        enemyPlaneList=new LinkedList<EnemyPlane>();
+        enemyPlaneList.add(0,enemyPlane);
+        num=1;
+        time=0;
         Timer t1=new Timer();
         int time1=10;
         t1.schedule(new TimerTask() {
             @Override
             public void run() {
-               // mUIHandler.obtainMessage(1001,enemyPlane).sendToTarget();
-                MainActivity.this.runOnUiThread(new Runnable() {
+                //子线程不允许修改ui，只有主线程才可以修改
+
+                MainActivity.this.runOnUiThread(new Runnable() {//匿名内部类
                     @Override
                     public void run() {
-                        enemyPlane.currentY+=1;
-                        enemyPlane.invalidate();
+                        EnemyPlane temp=new EnemyPlane(MainActivity.this,(int)(Math.random()*root.getWidth()));
+                        if(time%40==0){
+                        enemyPlaneList.add(0,temp);
+                        root.addView(enemyPlaneList.get(0));}
+                        time++;
+                        for(int i=0;i<enemyPlaneList.size();i++){
+                            if(enemyPlaneList.get(i).currentX>root.getWidth()){
+                                enemyPlaneList.get(i).speedX=-enemyPlaneList.get(i).speedX;
+                            }
+                            if(enemyPlaneList.get(i).currentX<0){
+                                enemyPlaneList.get(i).speedX=-enemyPlaneList.get(i).speedX;
+                            }
+                            enemyPlaneList.get(i).move();
+                        }
+//                        if(enemyPlane.currentX>root.getWidth()){
+//                            enemyPlane.speedX=-enemyPlane.speedX;
+//                        }
+//                        if(enemyPlane.currentX<0){
+//                            enemyPlane.speedX=-enemyPlane.speedX;
+//                        }
+//                        enemyPlane.move();
                     }
                 });
 
             }
         },time1,time1);
-
-       // mWorkHander.sendEmptyMessageDelayed(MSG_REFRESH_START,10000);
-        //mWorkHander.sendEmptyMessage(MSG_REFRESH_START);
-        root.addView(enemyPlane);
+        root.addView(enemyPlaneList.get(0));
 
         final Ariplane ariplane=new Ariplane(this);
         ariplane.setOnTouchListener(new View.OnTouchListener() {
@@ -67,42 +82,4 @@ public class MainActivity extends Activity {
         b1.currentY=ariplane.currentY;
         root.addView(b1);
     }
-    private class UIHandler extends android.os.Handler{
-        public UIHandler(Looper looper){
-            super(looper);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case 1001:
-                {
-                    Ariplane enemyPlane=(Ariplane)msg.obj;
-                    enemyPlane.currentY+=100;
-                    enemyPlane.invalidate();
-                }
-                break;
-            }
-        }
-    }
-//    public static final int MSG_WORK_ONE1=1;
-//    private static final int MSG_REFRESH_START=2;
-//    private static final int MSG_INtERVAL=3;
-//    private class WorkHandler extends Handler{
-//        public WorkHandler(Looper looper){
-//            super(looper);
-//        }
-//
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            switch (msg.what){
-//                case MSG_WORK_ONE1:{
-//                    //do something
-//                    mWorkHander.sendEmptyMessageDelayed(MSG_WORK_ONE1,1000);
-//                }
-//            }
-//        }
-//    }
 }
