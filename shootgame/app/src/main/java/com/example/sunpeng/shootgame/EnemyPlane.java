@@ -14,7 +14,7 @@ public class EnemyPlane extends View{
     float currentX;
     float currentY;
     int speedX=5;
-    int speedY=6;
+    int speedY=8;
     Bitmap enmyplane;
     public EnemyPlane(Context context){
         super(context);
@@ -37,4 +37,5 @@ public class EnemyPlane extends View{
         this.currentX+=this.speedX;
         this.invalidate();
     }
+
 }

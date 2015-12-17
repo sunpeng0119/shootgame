@@ -14,6 +14,7 @@ public class Airplane extends View {
     float currentX;
     float currentY;
     double speed=5;
+    int life=3;
     Bitmap plane;
     public  Airplane(Context context){
         super(context);

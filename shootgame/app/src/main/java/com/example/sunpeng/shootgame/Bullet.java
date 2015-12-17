@@ -6,6 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View;
+import android.widget.RelativeLayout;
+
+import java.util.List;
 
 /**
  * Created by sunpeng on 15-12-15.
@@ -13,7 +16,7 @@ import android.view.View;
 public class Bullet extends View {
     float currentX;
     float currentY;
-    double speed=10;
+    double speed=50;
     Bitmap bullet;
     Bullet(Context context){
         super(context);
@@ -30,10 +33,28 @@ public class Bullet extends View {
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
         Paint p=new Paint();
-        canvas.drawBitmap(bullet,currentX,currentY,p);
+        canvas.drawBitmap(bullet, currentX, currentY, p);
     }
     public void move(){
         currentY-=speed;
         this.invalidate();
+    }
+    public static int hit(List<EnemyPlane> enemyPlaneList,List<Bullet> bulletList,RelativeLayout root){
+        for(int i=0;i<bulletList.size();i++){
+            for(int k=0;k<enemyPlaneList.size();k++){
+                if((bulletList.get(i).currentX<=enemyPlaneList.get(k).currentX+enemyPlaneList.get(k).enmyplane.getWidth()
+                &&bulletList.get(i).currentX>=enemyPlaneList.get(k).currentX)&&(
+                        bulletList.get(i).currentY<=enemyPlaneList.get(k).currentY+enemyPlaneList.get(k).enmyplane.getHeight()&&
+                                bulletList.get(i).currentY>=enemyPlaneList.get(k).currentY
+                        )){
+                    root.removeView(bulletList.get(i));
+                    root.removeView(enemyPlaneList.get(k));
+                    bulletList.remove(i);
+                    enemyPlaneList.remove(k);
+                    return 5;
+                }
+            }
+        }
+        return 0;
     }
 }

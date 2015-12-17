@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,14 +17,19 @@ public class MainActivity extends Activity {
     Bullet b1;
     List<EnemyPlane> enemyPlaneList;
     List<Bullet>  bulletList;
+    Airplane airplane;
     int time;
     int num;
+    int sorce;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
         final RelativeLayout root=(RelativeLayout)findViewById(R.id.root);
-        final Airplane airplane=new Airplane(this);
+        final TextView textsorce=(TextView)findViewById(R.id.sorce);
+        airplane=new Airplane(this);
+        airplane.currentX=300;
+        airplane.currentY=1000;
         b1=new Bullet(this);
         enemyPlane= new EnemyPlane(this);
         enemyPlaneList=new LinkedList<EnemyPlane>();
@@ -32,6 +38,20 @@ public class MainActivity extends Activity {
         enemyPlaneList.add(0,enemyPlane);
         num=1;
         time=0;
+        sorce =0;
+        Timer t2=new Timer();
+        t2.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        sorce+=Bullet.hit(enemyPlaneList,bulletList,root);
+                        textsorce.setText("sorce:"+sorce);
+                    }
+                });
+            }
+        },100,100);
         Timer t1=new Timer();
         int time1=10;
         t1.schedule(new TimerTask() {
@@ -105,6 +125,5 @@ public class MainActivity extends Activity {
             }
         });
         root.addView(airplane);
-
     }
 }
