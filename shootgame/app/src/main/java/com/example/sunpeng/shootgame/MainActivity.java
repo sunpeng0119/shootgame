@@ -13,7 +13,9 @@ import java.util.TimerTask;
 
 public class MainActivity extends Activity {
     EnemyPlane enemyPlane;
+    Bullet b1;
     List<EnemyPlane> enemyPlaneList;
+    List<Bullet>  bulletList;
     int time;
     int num;
     @Override
@@ -21,8 +23,12 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
         final RelativeLayout root=(RelativeLayout)findViewById(R.id.root);
-        enemyPlane=new EnemyPlane(this);
+        final Airplane airplane=new Airplane(this);
+        b1=new Bullet(this);
+        enemyPlane= new EnemyPlane(this);
         enemyPlaneList=new LinkedList<EnemyPlane>();
+        bulletList=new LinkedList<Bullet>();
+        bulletList.add(0,b1);
         enemyPlaneList.add(0,enemyPlane);
         num=1;
         time=0;
@@ -50,6 +56,27 @@ public class MainActivity extends Activity {
                             }
                             enemyPlaneList.get(i).move();
                         }
+                        for(int i=0;i<enemyPlaneList.size();i++){
+                            if(enemyPlaneList.get(i).currentY>root.getHeight()){
+                                root.removeView(enemyPlaneList.get(i));
+                                enemyPlaneList.remove(i);
+
+                            }
+                        }
+                        Bullet bulletTemp=new Bullet(MainActivity.this,airplane);
+                        bulletList.add(0,bulletTemp);
+                        root.addView(bulletList.get(0));
+                        for(int k=0;k<bulletList.size();k++){
+                            bulletList.get(k).move();
+                        }
+                        for(int k=0;k<bulletList.size();k++){
+                            if(bulletList.get(k).currentY<0){
+                                root.removeView(bulletList.get(k));
+                                bulletList.remove(k);
+
+                            }
+                        }
+
 //                        if(enemyPlane.currentX>root.getWidth()){
 //                            enemyPlane.speedX=-enemyPlane.speedX;
 //                        }
@@ -63,23 +90,21 @@ public class MainActivity extends Activity {
             }
         },time1,time1);
         root.addView(enemyPlaneList.get(0));
+        root.addView(bulletList.get(0));
 
-        final Ariplane ariplane=new Ariplane(this);
-        ariplane.setOnTouchListener(new View.OnTouchListener() {
+
+        airplane.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                ariplane.currentX = event.getX() - ariplane.plane.getWidth() / 2;
-                ariplane.currentY = event.getY() - ariplane.plane.getHeight() / 2;
-                ariplane.setMinimumWidth(ariplane.plane.getWidth());
-                ariplane.setMinimumHeight(ariplane.plane.getHeight());
-                ariplane.invalidate();
+                airplane.currentX = event.getX() - airplane.plane.getWidth() / 2;
+                airplane.currentY = event.getY() - airplane.plane.getHeight() / 2;
+                airplane.setMinimumWidth(airplane.plane.getWidth());
+                airplane.setMinimumHeight(airplane.plane.getHeight());
+                airplane.invalidate();
                 return true;
             }
         });
-        root.addView(ariplane);
-        final Bullet b1=new Bullet(this);
-        b1.currentX=ariplane.currentX+ariplane.plane.getWidth()/2;
-        b1.currentY=ariplane.currentY;
-        root.addView(b1);
+        root.addView(airplane);
+
     }
 }
