@@ -2,6 +2,7 @@ package com.example.sunpeng.shootgame;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -48,14 +49,15 @@ public class MainActivity extends Activity {
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d("TEST","runOnUiThread");
                         sorce+=Bullet.hit(enemyPlaneList,bulletList,root);
                         textsorce.setText("sorce:"+sorce);
-                        EnemyPlane.hit(enemyPlaneList,airplane,root);
+                        EnemyPlane.hit(enemyPlaneList, airplane, root);
                         life.setText("life:"+airplane.life);
                     }
                 });
             }
-        },100,100);
+        },10,10);
         Timer t1=new Timer();
         int time1=10;
         t1.schedule(new TimerTask() {
@@ -67,7 +69,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void run() {
                         EnemyPlane temp = new EnemyPlane(MainActivity.this, (int) (Math.random() * root.getWidth()));
-                        if (time % 40 == 0) {
+                        if (time % 100 == 0) {
                             enemyPlaneList.add(0, temp);
                             root.addView(enemyPlaneList.get(0));
                         }
@@ -84,7 +86,7 @@ public class MainActivity extends Activity {
                         for (int i = 0; i < enemyPlaneList.size(); i++) {
                             if (enemyPlaneList.get(i).currentY > root.getHeight()) {
                                 root.removeView(enemyPlaneList.get(i));
-                                enemyPlaneList.remove(i);
+                                enemyPlaneList.remove(i--);
 
                             }
                         }
@@ -97,18 +99,10 @@ public class MainActivity extends Activity {
                         for (int k = 0; k < bulletList.size(); k++) {
                             if (bulletList.get(k).currentY < 0) {
                                 root.removeView(bulletList.get(k));
-                                bulletList.remove(k);
+                                bulletList.remove(k--);
 
                             }
                         }
-
-//                        if(enemyPlane.currentX>root.getWidth()){
-//                            enemyPlane.speedX=-enemyPlane.speedX;
-//                        }
-//                        if(enemyPlane.currentX<0){
-//                            enemyPlane.speedX=-enemyPlane.speedX;
-//                        }
-//                        enemyPlane.move();
                     }
                 });
 

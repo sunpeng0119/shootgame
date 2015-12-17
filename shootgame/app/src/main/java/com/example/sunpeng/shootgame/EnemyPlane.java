@@ -41,15 +41,20 @@ public class EnemyPlane extends View{
         this.invalidate();
     }
     public static void hit(List<EnemyPlane> enemyPlaneList , Airplane airplane,RelativeLayout root){
+        //List<EnemyPlane> planes=new ArrayList<>();
         for(int i=0;i<enemyPlaneList.size();i++){
             if((enemyPlaneList.get(i).currentX>=airplane.currentX&&
             enemyPlaneList.get(i).currentX<=airplane.currentX+airplane.plane.getWidth())&&(
                     enemyPlaneList.get(i).currentY>=airplane.currentY&&
                             enemyPlaneList.get(i).currentY<=airplane.currentY+airplane.plane.getHeight()
                     )){
-                airplane.life--;
+                //planes.add(enemyPlaneList.get(i));
+
                 root.removeView(enemyPlaneList.get(i));
+                enemyPlaneList.remove(i--);
+                airplane.life--;
             }
         }
+        //enemyPlaneList.removeAll(planes);
     }
 }
