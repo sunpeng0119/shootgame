@@ -6,6 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View;
+import android.widget.RelativeLayout;
+
+import java.util.List;
 
 /**
  * Created by sunpeng on 15-12-11.
@@ -37,5 +40,16 @@ public class EnemyPlane extends View{
         this.currentX+=this.speedX;
         this.invalidate();
     }
-
+    public static void hit(List<EnemyPlane> enemyPlaneList , Airplane airplane,RelativeLayout root){
+        for(int i=0;i<enemyPlaneList.size();i++){
+            if((enemyPlaneList.get(i).currentX>=airplane.currentX&&
+            enemyPlaneList.get(i).currentX<=airplane.currentX+airplane.plane.getWidth())&&(
+                    enemyPlaneList.get(i).currentY>=airplane.currentY&&
+                            enemyPlaneList.get(i).currentY<=airplane.currentY+airplane.plane.getHeight()
+                    )){
+                airplane.life--;
+                root.removeView(enemyPlaneList.get(i));
+            }
+        }
+    }
 }
