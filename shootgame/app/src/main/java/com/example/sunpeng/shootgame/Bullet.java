@@ -16,7 +16,7 @@ import java.util.List;
 public class Bullet extends View {
     float currentX;
     float currentY;
-    double speed=50;
+    double speed=20;
     Bitmap bullet;
     Bullet(Context context){
         super(context);

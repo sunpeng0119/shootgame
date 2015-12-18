@@ -17,8 +17,8 @@ import java.util.List;
 public class EnemyPlane extends View{
     float currentX;
     float currentY;
-    int speedX=5;
-    int speedY=8;
+    int speedX=2;
+    int speedY=3;
     int doublefrie=0;
     Bitmap enmyplane;
     public EnemyPlane(Context context){
@@ -31,12 +31,18 @@ public class EnemyPlane extends View{
         enmyplane=BitmapFactory.decodeResource(context.getResources(),R.drawable.airplane);
         setFocusable(true);
         this.currentX=currentX;
+        if(Math.random()*2>1){
+            this.speedX=-speedX;
+        }
     }
     public  EnemyPlane(Context context,int currentX,int doublefrie){
         super(context);
         enmyplane=BitmapFactory.decodeResource(context.getResources(),R.drawable.bee);
         setFocusable(true);
         this.currentX=currentX;
+        if(Math.random()*2>1){
+            this.speedX=-speedX;
+        }
         this.doublefrie=doublefrie;
 
     }
@@ -69,7 +75,7 @@ public class EnemyPlane extends View{
     }
     public static void enterEnemy(int time,List<EnemyPlane> enemyPlaneList,RelativeLayout root,Activity mainactivity){
 
-        if (time % 10 == 0) {
+        if (time % 30 == 0) {
             EnemyPlane temp = new EnemyPlane(mainactivity, (int) (Math.random() * (root.getWidth())));
             if(temp.currentX>root.getWidth()-temp.enmyplane.getWidth()){
                 temp.currentX=temp.currentX-temp.enmyplane.getWidth();
@@ -77,7 +83,7 @@ public class EnemyPlane extends View{
             enemyPlaneList.add(0, temp);
             root.addView(enemyPlaneList.get(0));
         }
-        if(time%30==0){
+        if(time%100==0){
             EnemyPlane temp = new EnemyPlane(mainactivity, (int) (Math.random() * root.getWidth()),50);
             if(temp.currentX>root.getWidth()-temp.enmyplane.getWidth()){
                 temp.currentX=temp.currentX-temp.enmyplane.getWidth();}

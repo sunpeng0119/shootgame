@@ -19,7 +19,7 @@ public class Airplane extends View {
     float currentY;
     double speed=5;
     int life=3;
-    int doublefire=100;
+    int doublefire=0;
     Bitmap planes[]=new Bitmap[2];
     Bitmap plane=planes[0];
     public  Airplane(Context context){
@@ -40,7 +40,8 @@ public class Airplane extends View {
         plane=planes[m];
         this.invalidate();
     }
-    public static void fire(Airplane airplane,List<Bullet> bulletList,RelativeLayout root,Activity mainactivity){
+    public static void fire(Airplane airplane,List<Bullet> bulletList,RelativeLayout root,Activity mainactivity,int time){
+        if(time%20==0){
         if(airplane.doublefire==0){
             Bullet bulletTemp = new Bullet(mainactivity, airplane);
             bulletList.add(0, bulletTemp);
@@ -53,15 +54,14 @@ public class Airplane extends View {
             bulletList.add(0, bulletTemp2);
             root.addView(bulletList.get(0));
             airplane.doublefire-=2;
-        }
+        }}
         for (int k = 0; k < bulletList.size(); k++) {
             bulletList.get(k).move();
         }
         for (int k = 0; k < bulletList.size(); k++) {
-            if (bulletList.get(k).currentY < 0) {
+            if (bulletList.get(k).currentY < -bulletList.get(k).bullet.getWidth()) {
                 root.removeView(bulletList.get(k));
                 bulletList.remove(k--);
-
             }
         }
 

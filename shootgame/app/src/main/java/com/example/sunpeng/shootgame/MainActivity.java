@@ -68,9 +68,9 @@ public class MainActivity extends Activity {
                     public void run() {
                         //敌机进场
                         EnemyPlane.enterEnemy(time,enemyPlaneList,root,MainActivity.this);
-                        time++;
                         //英雄级发射子弹
-                        Airplane.fire(airplane,bulletList,root,MainActivity.this);
+                        Airplane.fire(airplane,bulletList,root,MainActivity.this,time);
+                        time++;
                         //刷新英雄机动画
                         airplane.freshen(time);
                     }
@@ -78,6 +78,7 @@ public class MainActivity extends Activity {
 
             }
         }, time1, time1);
+        t1.cancel();
         root.addView(enemyPlaneList.get(0));
         root.addView(bulletList.get(0));
 
