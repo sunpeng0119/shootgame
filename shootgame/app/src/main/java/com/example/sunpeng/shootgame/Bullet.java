@@ -30,6 +30,13 @@ public class Bullet extends View {
         this.currentY=ariplane.currentY;
         setFocusable(true);
     }
+    Bullet(Context context,Airplane ariplane,int dx){
+        super(context);
+        bullet= BitmapFactory.decodeResource(context.getResources(),R.drawable.bullet);
+        this.currentX=ariplane.currentX+ariplane.plane.getWidth()/2-(float)dx;
+        this.currentY=ariplane.currentY;
+        setFocusable(true);
+    }
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
         Paint p=new Paint();
@@ -39,7 +46,7 @@ public class Bullet extends View {
         currentY-=speed;
         this.invalidate();
     }
-    public static int hit(List<EnemyPlane> enemyPlaneList,List<Bullet> bulletList,RelativeLayout root){
+    public static int hit(List<EnemyPlane> enemyPlaneList,List<Bullet> bulletList,RelativeLayout root,Airplane airplane){
         for(int i=0;i<bulletList.size();i++){
             for(int k=0;k<enemyPlaneList.size();k++){
                 if((bulletList.get(i).currentX<=enemyPlaneList.get(k).currentX+enemyPlaneList.get(k).enmyplane.getWidth()
@@ -47,11 +54,13 @@ public class Bullet extends View {
                         bulletList.get(i).currentY<=enemyPlaneList.get(k).currentY+enemyPlaneList.get(k).enmyplane.getHeight()&&
                                 bulletList.get(i).currentY>=enemyPlaneList.get(k).currentY
                         )){
+                    airplane.doublefire+=enemyPlaneList.get(k).doublefrie;
                     root.removeView(bulletList.get(i));
                     root.removeView(enemyPlaneList.get(k));
                     bulletList.remove(i);
                     enemyPlaneList.remove(k);
                     return 5;
+
                 }
             }
         }

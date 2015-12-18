@@ -2,7 +2,6 @@ package com.example.sunpeng.shootgame;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -49,8 +48,7 @@ public class MainActivity extends Activity {
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("TEST","runOnUiThread");
-                        sorce+=Bullet.hit(enemyPlaneList,bulletList,root);
+                        sorce+=Bullet.hit(enemyPlaneList,bulletList,root,airplane);
                         textsorce.setText("sorce:"+sorce);
                         EnemyPlane.hit(enemyPlaneList, airplane, root);
                         life.setText("life:"+airplane.life);
@@ -59,7 +57,7 @@ public class MainActivity extends Activity {
             }
         },10,10);
         Timer t1=new Timer();
-        int time1=10;
+        final int time1=10;
         t1.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -68,41 +66,13 @@ public class MainActivity extends Activity {
                 MainActivity.this.runOnUiThread(new Runnable() {//匿名内部类
                     @Override
                     public void run() {
-                        EnemyPlane temp = new EnemyPlane(MainActivity.this, (int) (Math.random() * root.getWidth()));
-                        if (time % 100 == 0) {
-                            enemyPlaneList.add(0, temp);
-                            root.addView(enemyPlaneList.get(0));
-                        }
+                        //敌机进场
+                        EnemyPlane.enterEnemy(time,enemyPlaneList,root,MainActivity.this);
                         time++;
-                        for (int i = 0; i < enemyPlaneList.size(); i++) {
-                            if (enemyPlaneList.get(i).currentX > root.getWidth()) {
-                                enemyPlaneList.get(i).speedX = -enemyPlaneList.get(i).speedX;
-                            }
-                            if (enemyPlaneList.get(i).currentX < 0) {
-                                enemyPlaneList.get(i).speedX = -enemyPlaneList.get(i).speedX;
-                            }
-                            enemyPlaneList.get(i).move();
-                        }
-                        for (int i = 0; i < enemyPlaneList.size(); i++) {
-                            if (enemyPlaneList.get(i).currentY > root.getHeight()) {
-                                root.removeView(enemyPlaneList.get(i));
-                                enemyPlaneList.remove(i--);
-
-                            }
-                        }
-                        Bullet bulletTemp = new Bullet(MainActivity.this, airplane);
-                        bulletList.add(0, bulletTemp);
-                        root.addView(bulletList.get(0));
-                        for (int k = 0; k < bulletList.size(); k++) {
-                            bulletList.get(k).move();
-                        }
-                        for (int k = 0; k < bulletList.size(); k++) {
-                            if (bulletList.get(k).currentY < 0) {
-                                root.removeView(bulletList.get(k));
-                                bulletList.remove(k--);
-
-                            }
-                        }
+                        //英雄级发射子弹
+                        Airplane.fire(airplane,bulletList,root,MainActivity.this);
+                        //刷新英雄机动画
+                        airplane.freshen(time);
                     }
                 });
 
@@ -110,6 +80,7 @@ public class MainActivity extends Activity {
         }, time1, time1);
         root.addView(enemyPlaneList.get(0));
         root.addView(bulletList.get(0));
+
 
 
         airplane.setOnTouchListener(new View.OnTouchListener() {
@@ -125,4 +96,5 @@ public class MainActivity extends Activity {
         });
         root.addView(airplane);
     }
+
 }
