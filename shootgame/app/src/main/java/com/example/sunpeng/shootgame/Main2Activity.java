@@ -27,5 +27,6 @@ public class Main2Activity extends Activity {
                 finish();
             }
         });
+
     }
 }
