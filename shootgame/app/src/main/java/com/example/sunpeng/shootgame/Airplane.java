@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.annotation.Nullable;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -24,6 +26,20 @@ public class Airplane extends View {
     Bitmap plane=planes[0];
     public  Airplane(Context context){
         super(context);
+        planes[0]= BitmapFactory.decodeResource(context.getResources(),R.drawable.hero0);
+        planes[1]=BitmapFactory.decodeResource(context.getResources(),R.drawable.hero1);
+        setFocusable(true);
+        plane=planes[0];
+    }
+    public Airplane(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        planes[0]= BitmapFactory.decodeResource(context.getResources(),R.drawable.hero0);
+        planes[1]=BitmapFactory.decodeResource(context.getResources(),R.drawable.hero1);
+        setFocusable(true);
+        plane=planes[0];
+    }
+    public Airplane(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context,attrs,defStyleAttr);
         planes[0]= BitmapFactory.decodeResource(context.getResources(),R.drawable.hero0);
         planes[1]=BitmapFactory.decodeResource(context.getResources(),R.drawable.hero1);
         setFocusable(true);

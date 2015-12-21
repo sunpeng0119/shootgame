@@ -22,6 +22,19 @@
         android:id="@+id/sorce"
         android:layout_below="@+id/life"
         android:textColor="@android:color/holo_red_light"/>
+    <com.example.sunpeng.shootgame.Airplane
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/airplane"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="暂停"
+        android:id="@+id/puse"
+        android:textColor="@android:color/holo_red_light"
+        android:layout_alignParentRight="true" />
 
 
 </RelativeLayout>

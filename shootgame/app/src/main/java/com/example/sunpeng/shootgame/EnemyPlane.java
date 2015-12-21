@@ -18,7 +18,7 @@ public class EnemyPlane extends View{
     float currentX;
     float currentY;
     int speedX=2;
-    int speedY=3;
+    int speedY=5;
     int doublefrie=0;
     Bitmap enmyplane;
     public EnemyPlane(Context context){
@@ -59,9 +59,9 @@ public class EnemyPlane extends View{
     public static void hit(List<EnemyPlane> enemyPlaneList , Airplane airplane,RelativeLayout root){
         //List<EnemyPlane> planes=new ArrayList<>();
         for(int i=0;i<enemyPlaneList.size();i++){
-            if((enemyPlaneList.get(i).currentX>=airplane.currentX&&
+            if((enemyPlaneList.get(i).currentX>=airplane.currentX-enemyPlaneList.get(i).enmyplane.getWidth()&&
             enemyPlaneList.get(i).currentX<=airplane.currentX+airplane.plane.getWidth())&&(
-                    enemyPlaneList.get(i).currentY>=airplane.currentY&&
+                    enemyPlaneList.get(i).currentY>=airplane.currentY-enemyPlaneList.get(i).enmyplane.getHeight()&&
                             enemyPlaneList.get(i).currentY<=airplane.currentY+airplane.plane.getHeight()
                     )){
                 //planes.add(enemyPlaneList.get(i));
