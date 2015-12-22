@@ -116,7 +116,7 @@ public class MainActivity extends Activity {
                         Intent intent = new Intent(MainActivity.this, Main2Activity.class);
                         state = GAME_OVER;
                         startActivity(intent);
-                        //finish();
+                        finish();
                         onDestroy();
                     }
                     //敌机进场
@@ -129,7 +129,7 @@ public class MainActivity extends Activity {
                 }
             }
         };
-        
+
         Timer t1=new Timer();
         final int time1=10;
         t1.schedule(new TimerTask() {
