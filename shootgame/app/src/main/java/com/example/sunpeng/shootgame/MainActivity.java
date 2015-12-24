@@ -2,9 +2,11 @@ package com.example.sunpeng.shootgame;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +33,11 @@ public class MainActivity extends Activity {
     public static final int RUNNING = 1;
     public static final int PAUSE = 2;
     public static final int GAME_OVER = 3;
+    String fristName,scondName,thridName;
+    String usrName;
+    int fristResult,scondResult,thridResult;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +49,24 @@ public class MainActivity extends Activity {
         airplane=(Airplane)findViewById(R.id.airplane);
         life.setText("life:" + airplane.life);
         final ImageView show=new ImageView(this);
+        //获取用户输入的用户名
+        Intent intent=getIntent();
+        Bundle bundle=intent.getExtras();
+        usrName=bundle.getString("userName");
+        if(usrName.length()==0){
+            usrName="user";
+        }
+        Log.v("username",usrName);
+        //定义SharedPreferences preferences;
+        //SharedPreferences.Editor editor;
+        preferences = getSharedPreferences("result", MODE_APPEND);
+        editor=preferences.edit();
+        fristName=preferences.getString("fristName", "user01");
+        fristResult=preferences.getInt("fristResult", 0);
+        scondName=preferences.getString("scondName", "user02");
+        scondResult=preferences.getInt("scondResult", 0);
+        thridName=preferences.getString("thridName", "user03");
+        thridResult=preferences.getInt("thridResult", 0);
 
         airplane.currentX=500;
         airplane.currentY=1200;
@@ -113,6 +138,31 @@ public class MainActivity extends Activity {
                     life.setText("life:" + airplane.life);
                     if (airplane.life == 0) {
                         //root.removeView(show);
+                        if(sorce>fristResult){
+                            thridName=scondName;
+                            thridResult=scondResult;
+                            scondName=fristName;
+                            scondResult=fristResult;
+                            fristName=usrName;
+                            fristResult=sorce;
+                        }else if(sorce>scondResult){
+                            thridName=scondName;
+                            thridResult=scondResult;
+                            scondName=usrName;
+                            scondResult=sorce;
+
+                        }else if(sorce>thridResult){
+                            thridName=usrName;
+                            thridResult=sorce;
+                        }
+                        editor.putString("fristName",fristName);
+                        editor.putString("scondName",scondName);
+                        editor.putString("thridName",thridName);
+                        editor.putInt("scondResult", scondResult);
+                        editor.putInt("fristResult",fristResult);
+                        editor.putInt("thridResult",thridResult);
+                        editor.commit();
+
                         Intent intent = new Intent(MainActivity.this, Main2Activity.class);
                         state = GAME_OVER;
                         startActivity(intent);
